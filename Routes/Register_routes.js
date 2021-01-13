@@ -23,11 +23,11 @@ var sha512=function(password,salt){
 function saltHashPassword(userpassword){
     var salt=getRandomString(16); //create 16 random charachter
     var passwordData=sha512(userpassword,salt)
-    return passwordData
+    return passwordData 
 }
 
 function checkHashPassword(userPassword,salt){
-    var passwordData=(userPassword,salt);
+    var passwordData=sha512(userPassword,salt)
     return passwordData;
 }
 
@@ -52,25 +52,27 @@ router.post("/insert",(req,res)=>{
 })
 router.post('/findUser',(req,res)=>{
     var data=req.body;
-    // res.send("Hello")
     var email=data.email;
     var USerpassword=data.password;
     Register.find({'email':email}).count(function(err,number){
         if(number==0){
-            res.send("Email is not Exists")
+            // response.json("Email not Exists")
+            console.log("Email not Exists")
+            res.send("Email not Exists")
         }
         else{
-            Register.find({'email':email},(function(err,Register){
-                var salt=Register.salt
-                var hashed_Password=checkHashPassword(USerpassword,salt).passwordHash;
-                var enripted_password=Register.password;
+            Register.find({'email':email},(function(err,register){
+                console.log("test")
+                var salt=register.salt
+                var hashed_Password=checkHashPassword(Userpassword,salt).passwordHash;
+                var enripted_password=register.password;
                 if(hashed_Password==enripted_password){
-                    response.json("Login Successful")
-                    console.log("Login Successful")
+                    res.send("login Successfully")
+                    console.log("login Successfully")
                 }
                 else{
-                    response.json("Wrong Password")
-                    console.log("Wrong Password")
+                    res.send("Wrong password")
+                    console.log("Wrong password")
                 }
             }))
         }
