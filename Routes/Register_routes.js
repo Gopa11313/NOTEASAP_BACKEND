@@ -9,7 +9,6 @@ var getRandomString=function(length){
         .toString('hex') //convert to hexa format
         .slice(0,length);
 }
-
 var sha512=function(password,salt){
     var hash=crypto.createHmac('sha512',salt);
     hash.update(password);
@@ -30,8 +29,6 @@ function checkHashPassword(userPassword,salt){
     var passwordData=sha512(userPassword,salt)
     return passwordData;
 }
-
-
 router.post("/insert",(req,res)=>{
     console.log(res.body);
     var post_data=req.body;
@@ -41,8 +38,7 @@ router.post("/insert",(req,res)=>{
     var salt=hash_data.salt;// save salt
     var Rname=post_data.name ;
     var Remail=post_data.email;
-    // var image
-    var data=new Register({id:1,name:Rname,email:Remail,password:Rpassword,image:""})
+    var data=new Register({name:Rname,email:Remail,password:Rpassword,image:""})
     data.save().then(function(){
         res.send(req.body)
         console.log(req.body)
@@ -56,7 +52,6 @@ router.post('/findUser',(req,res)=>{
     var USerpassword=data.password;
     Register.find({'email':email}).count(function(err,number){
         if(number==0){
-            // response.json("Email not Exists")
             console.log("Email not Exists")
             res.send("Email not Exists")
         }
@@ -64,7 +59,7 @@ router.post('/findUser',(req,res)=>{
             Register.find({'email':email},(function(err,register){
                 console.log("test")
                 var salt=register.salt
-                var hashed_Password=checkHashPassword(Userpassword,salt).passwordHash;
+                var hashed_Password=checkHashPassword(USerpassword,salt).passwordHash;
                 var enripted_password=register.password;
                 if(hashed_Password==enripted_password){
                     res.send("login Successfully")
