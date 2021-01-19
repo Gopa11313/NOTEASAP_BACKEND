@@ -1,76 +1,56 @@
 const express=require('express');
 const router=express.Router();
-const crypto=require('crypto');
+const bcrypt=require('bcryptjs')
 const Register=require('../Models/RegisterUSer');
 const { response } = require('express');
+const saltRounds = 10;
+const {check,validationResult}=require('express-validator')
 
-var getRandomString=function(length){
-    return crypto.randomBytes(Math.ceil(length/2))
-        .toString('hex') //convert to hexa format
-        .slice(0,length);
-}
-var sha512=function(password,salt){
-    var hash=crypto.createHmac('sha512',salt);
-    hash.update(password);
-    var value=hash.digest('hex')
-    return {
-        salt:salt,
-        passwordHash:value
-    };
-};
 
-function saltHashPassword(userpassword){
-    var salt=getRandomString(16); //create 16 random charachter
-    var passwordData=sha512(userpassword,salt)
-    return passwordData 
-}
 
-function checkHashPassword(userPassword,salt){
-    var passwordData=sha512(userPassword,salt)
-    return passwordData;
-}
-router.post("/insert",(req,res)=>{
-    console.log(res.body);
-    var post_data=req.body;
-    var plaint_password=post_data.password;
-    var hash_data=saltHashPassword(plaint_password)
-    var Rpassword=hash_data.passwordHash //save password hash
-    var salt=hash_data.salt;// save salt
-    var Rname=post_data.name ;
-    var Remail=post_data.email;
-    var data=new Register({name:Rname,email:Remail,password:Rpassword,image:""})
-    data.save().then(function(){
-        res.send(req.body)
-        console.log(req.body)
-    }).catch(function(e){ 
-        res.send(e)
-    })
-})
-router.post('/findUser',(req,res)=>{
-    var data=req.body;
-    var email=data.email;
-    var USerpassword=data.password;
-    Register.find({'email':email}).count(function(err,number){
-        if(number==0){
-            console.log("Email not Exists")
-            res.send("Email not Exists")
+
+
+router.post("/user/add",
+    [
+        check('name',"Name must be filled").not().isEmpty(),
+        check('email',"Enter a valid email").isEmail(),
+        check('password',"Password must be 6 latter long").isLength({min:6})
+    ],
+    (req,res)=>{
+        const errros=validationResult(req);
+        if(errros.isEmpty()){
+            var data1=req.body;
+            var name=data1.name;
+            var email=data1.email;
+            var password=data1.password
+            var image=data1.image
+            const hash = bcrypt.hashSync(password, saltRounds);
+            var data=new Register({name:name,email:email,password:hash,image:image})
+            data.save().then(function(){
+                res.send(req.body)
+                console.log(req.body)
+            }).catch(function(e){ 
+                res.send(e)
+            })
         }
         else{
-            Register.find({'email':email},(function(err,register){
-                console.log("test")
-                var salt=register.salt
-                var hashed_Password=checkHashPassword(USerpassword,salt).passwordHash;
-                var enripted_password=register.password;
-                if(hashed_Password==enripted_password){
-                    res.send("login Successfully")
-                    console.log("login Successfully")
-                }
-                else{
-                    res.send("Wrong password")
-                    console.log("Wrong password")
-                }
-            }))
-        }
+            console.log(errros.array());
+            res.send(errros.array())
+        }    
 })
+
+router.post('/findUser',async (req,res)=>{
+    const body = req.body;
+    const register = await Register.findOne({ email: body.email });
+    if (register) {
+      const validPassword = await bcrypt.compare(body.password, register.password);
+      if (validPassword) {
+        res.send("Valid password" )
+      } else {
+        res.send("Invalid Password");
+      }
+    } else {
+      res.send("User does not exist" );
+    }
 })
 module.exports=router
