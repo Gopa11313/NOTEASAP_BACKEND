@@ -7,9 +7,6 @@ const saltRounds = 10;
 const {check,validationResult}=require('express-validator')
 
 
-
-
-
 router.post("/user/add",
     [
         check('name',"Name must be filled").not().isEmpty(),

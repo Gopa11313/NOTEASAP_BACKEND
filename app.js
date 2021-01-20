@@ -4,7 +4,7 @@ const R_Router=require("./Routes/Register_routes")
 const UploadNote=require("./Routes/UploadNote_routes")
 const mongooes=require("./Databse/db")
 const app=express();
-app.use(express.json())//multer
+app.use(express.json())
 app.use(R_Router)
 app.use(UploadNote)
 app.use(bodyparser.urlencoded({extended:false}))
