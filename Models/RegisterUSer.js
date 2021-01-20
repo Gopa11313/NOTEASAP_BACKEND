@@ -1,20 +1,28 @@
-const mongoose=require('mongoose');
-const Register=mongoose.model('Register',{
-    name:{
-        type:String,
-        requried:true
+const mongoose = require('mongoose');
+const Register = mongoose.model('Register', {
+    name: {
+        type: String,
+        requried: true
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
-    password:{
-        type:String,
-        required:true
+    password: {
+        type: String,
+        required: true
     },
-    image:{
-        type:String
+    image: {
+        type: String
     }
+    ,
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
+
 })
-module.exports=Register;
+module.exports = Register;
