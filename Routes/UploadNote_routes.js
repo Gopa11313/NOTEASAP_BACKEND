@@ -19,4 +19,9 @@ router.post('/uploadnotes',(req,res)=>{
         res.send(e)
     })
 })
+router.get('/get/notes',(req,res)=>{
+    UploadNotes.find().then(function(data){
+        res.send(data)
+    })
+})
 module.exports=router
