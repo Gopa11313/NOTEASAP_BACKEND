@@ -37,18 +37,33 @@ router.post("/user/add",
         }    
 })
 
-router.post('/findUser',async (req,res)=>{
+
+router.get('/user/login',(req,res)=>{
     const body = req.body;
-    const register = await Register.findOne({ email: body.email });
-    if (register) {
-      const validPassword = await bcrypt.compare(body.password, register.password);
-      if (validPassword) {
-        res.send("Valid password" )
-      } else {
-        res.send("Invalid Password");
-      }
-    } else {
-      res.send("User does not exist" );
-    }
+    Register.findOne({ email: body.email }).then(function(userData){
+        if(userData==null){
+          return res.status(403).json({Message:"Invalid User!!"})
+        }
+        bcrypt.compare(body.password, userData.password,function(err,result){
+            if(result==false){
+              return res.status(403).json({Message:"Invalid User!!"})
+            }
+            res.send("Authenticated!!")
+        })
+
+    }).catch(function(e){
+
+    })
+    // if (register) {
+    //   const validPassword = await bcrypt.compare(body.password, register.password);
+    //   if (validPassword) {
+    //     res.send("Valid password" )
+    //   } else {
+    //     res.send("Invalid Password");
+    //   }
+    // } else {
+    //   res.status(400).json({Message:"User doesnot exist"})
+    //   res.send("User does not exist" );
+    // }
 })
 module.exports=router
