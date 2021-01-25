@@ -28,10 +28,11 @@ router.post("/user/add",
                 res.status(201).json({Message:"User Register Success"})
             }).catch(function(e){ 
                 res.send(e)
+                res.status(500).json({Message:e})
             })
         }
         else{
-            console.log(errros.array());
+          res.status(400).json(errros.array())
             res.send(errros.array())
         }    
 })
