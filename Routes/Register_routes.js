@@ -1,4 +1,5 @@
 const express=require('express');
+const jwt=require('jsonwebtoken')
 const router=express.Router();
 const bcrypt=require('bcryptjs')
 const Register=require('../Models/RegisterUSer');
@@ -48,22 +49,13 @@ router.get('/user/login',(req,res)=>{
             if(result==false){
               return res.status(403).json({Message:"Invalid User!!"})
             }
-            res.send("Authenticated!!")
+            const token =jwt.sign({userId:userData._id},'secretkey');
+            res.status(200).json({Message:"Login Successfull",token:token})
         })
 
     }).catch(function(e){
 
     })
-    // if (register) {
-    //   const validPassword = await bcrypt.compare(body.password, register.password);
-    //   if (validPassword) {
-    //     res.send("Valid password" )
-    //   } else {
-    //     res.send("Invalid Password");
-    //   }
-    // } else {
-    //   res.status(400).json({Message:"User doesnot exist"})
-    //   res.send("User does not exist" );
-    // }
+
 })
 module.exports=router
