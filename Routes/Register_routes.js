@@ -25,7 +25,7 @@ router.post("/user/add",
             var data=new Register({name:name,email:email,password:hash,image:image})
             data.save().then(function(){
                 res.send(req.body)
-                console.log(req.body)
+                res.status(201).json({Message:"User Register Success"})
             }).catch(function(e){ 
                 res.send(e)
             })
