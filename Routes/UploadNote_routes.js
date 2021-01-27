@@ -2,6 +2,7 @@ const express = require('express');
 const UploadNote = require('../Models/UploadNotes');
 const router = express.Router();
 const UploadNotes = require('../Models/UploadNotes');
+const auth=require("../middleware/auth")
 const { check, validationResult } = require('express-validator')
 
 router.post('/upload/note',
@@ -42,7 +43,7 @@ router.get('/get/notes', (req, res) => {
     })
 })
 
-router.delete("/delete/note/:Nid", (req, res) => {
+router.delete("/delete/note/:Nid",auth.varifyUser,(req, res) => {
     const Nid = req.params.Nid;
     UploadNote.deleteOne({ _id: Nid }).then(function () {
         res.status(200).json({msg:"Note Successfully deleted"})

@@ -40,7 +40,7 @@ router.post("/user/add",
 })
 
 
-router.get('/user/login',(req,res)=>{
+router.post('/user/login',(req,res)=>{
     const body = req.body;
     Register.findOne({ email: body.email }).then(function(userData){
         if(userData==null){
@@ -59,20 +59,6 @@ router.get('/user/login',(req,res)=>{
     })
 })
 
-module.exports.varifyUser=function(req,res,next){
-    try{
-        const token=req.headers.authorizatioon.split(" ")[1];
-        const decodedData=jwt.varifyUser(token,'anysecretkey');
-        Register.findById({_id:decodedData.userId}).then(function(alldata){
-            req.user=alldata;
-            next()
-        }).catch(function(err){
-            return res.status(402).json({msg:"Auth Failed!"})
-        })
 
-    }
-    catch(err){
-        return res.status(402),json({msg:"Auth Failed!"})
-    }
-}
+
 module.exports=router
