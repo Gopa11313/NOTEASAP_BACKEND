@@ -35,18 +35,19 @@ router.post('/upload/note',
             res.send(errors.array())
         }
     })
+
 router.get('/get/notes', (req, res) => {
     UploadNotes.find().then(function (data) {
         res.send([data])
     })
 })
 
-router.delete("/delete/notes/:id", (req, res) => {
-    const id = req.params.UserID;
-    UploadNote.deleteOne({ _id: id }).then(function () {
-        res.send('deleted')
+router.delete("/delete/note/:Nid", (req, res) => {
+    const Nid = req.params.Nid;
+    UploadNote.deleteOne({ _id: Nid }).then(function () {
+        res.status(200).json({msg:"Note Successfully deleted"})
     }).catch(function (e) {
-        res.send(e)
+        res.status(500).json({msg:e})
     })
 })
 
