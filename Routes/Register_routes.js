@@ -5,7 +5,8 @@ const bcrypt=require('bcryptjs')
 const Register=require('../Models/RegisterUSer');
 const { response } = require('express');
 const saltRounds = 10;
-const {check,validationResult}=require('express-validator')
+const {check,validationResult}=require('express-validator');
+const { json } = require('body-parser');
 
 
 router.post("/user/add",
@@ -54,8 +55,24 @@ router.get('/user/login',(req,res)=>{
         })
 
     }).catch(function(e){
-
+        res.send(e)
     })
 })
 
+module.exports.varifyUser=function(req,res,next){
+    try{
+        const token=req.headers.authorizatioon.split(" ")[1];
+        const decodedData=jwt.varifyUser(token,'anysecretkey');
+        Register.findById({_id:decodedData.userId}).then(function(alldata){
+            req.user=alldata;
+            next()
+        }).catch(function(err){
+            return res.status(402).json({msg:"Auth Failed!"})
+        })
+
+    }
+    catch(err){
+        return res.status(402),json({msg:"Auth Failed!"})
+    }
+}
 module.exports=router

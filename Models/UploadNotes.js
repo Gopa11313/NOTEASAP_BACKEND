@@ -1,19 +1,24 @@
 const mongoose=require('mongoose');
 const UploadNote=mongoose.model('UploadNote',{
     file:{
-        type:String
+        type:String,
+        requried: true
     },
     level:{
-        type:String
+        type:String,
+        requried: true
     },
     subject:{
-        type:String
+        type:String,
+        requried: true
     },
     c_name:{
-        type:String
+        type:String,
+        requried: true
     },
     topic:{
-        type:String
+        type:String,
+        requried: true
     },
     description:{
         type:String
