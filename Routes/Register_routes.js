@@ -61,10 +61,10 @@ router.post('/user/login',(req,res)=>{
 router.put('/user/update/:UserID',(req,res)=>{
     const id=req.params.UserID
     const image=req.body.image;
-    User.updateOne({_id:id},{image:image}).then(function(){
+    Register.updateOne({_id:id},{image:image}).then(function(){
         res.status(200).json({Message:"Update Successfull"})
     }).catch(function(e){
-        res.send(e)
+        res.status(400).json({msg:e})
     })
 })
 
