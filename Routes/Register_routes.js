@@ -39,7 +39,6 @@ router.post("/user/add",
         }    
 })
 
-
 router.post('/user/login',(req,res)=>{
     const body = req.body;
     Register.findOne({ email: body.email }).then(function(userData){
@@ -59,6 +58,14 @@ router.post('/user/login',(req,res)=>{
     })
 })
 
-
+router.put('/user/update/:UserID',(req,res)=>{
+    const id=req.params.UserID
+    const image=req.body.image;
+    User.updateOne({_id:id},{image:image}).then(function(){
+        res.status(200).json({Message:"Update Successfull"})
+    }).catch(function(e){
+        res.send(e)
+    })
+})
 
 module.exports=router
