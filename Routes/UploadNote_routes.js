@@ -22,7 +22,8 @@ router.post('/upload/note',
             var c_name = post_data.c_name;
             var topic = post_data.topic;
             var description = post_data.description;
-            var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description })
+            var ratting=1
+            var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description,ratting:ratting })
             data.save().then(function () {
                 res.send(req.body)
                 res.status(201).json({ Message: "Note Uploaded Successfully" })

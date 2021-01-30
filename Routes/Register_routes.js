@@ -58,7 +58,7 @@ router.post('/user/login',(req,res)=>{
     })
 })
 
-router.put('/user/update/:UserID',(req,res)=>{
+router.put('/user/image/update/:UserID',(req,res)=>{
     const id=req.params.UserID
     const image=req.body.image;
     Register.updateOne({_id:id},{image:image}).then(function(){
@@ -68,4 +68,16 @@ router.put('/user/update/:UserID',(req,res)=>{
     })
 })
 
+router.put('/user/update/:UserID',(req,res)=>{
+    const id=req.params.UserID
+    const name=req.body.name;
+    const email=req.body.email;
+    const password=req.body.password
+    const image=req.body.image
+    Register.updateMany({_id:id},{name:name},{email:email},{password:password},{image:image}).then(function(){
+        res.status(200).json({Message:"Update Successfull"})
+    }).catch(function(e){
+        res.status(400).json({msg:e})
+    })
+})
 module.exports=router
