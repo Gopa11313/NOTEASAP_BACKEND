@@ -25,6 +25,9 @@ const UploadNote=mongoose.model('UploadNote',{
     },
     ratting:{
         type:Number
+    },
+    userId:{
+        type:String
     }
 });
 module.exports=UploadNote;

@@ -30,11 +30,22 @@ module.exports.varifyAdmin=function(req,res,next){
 }
 
 
-module.exports.varifyUSer=function(req,res,next){
+module.exports.varifyParticularUser=function(req,res,next){
     if(!req.user){
         return res.status(402).json({msg:"Unauthorized access!!"})
     }
     else if(req.user.role!=='User'){
+        return res.status(402).json({msg:"Unauthorized access!!"})
+    }
+    next()
+}
+
+
+module.exports.varifyAdminorUser=function(req,res,next){
+    if(!req.user){
+        return res.status(402).json({msg:"Unauthorized access!!"})
+    }
+    else if(req.user.role!=='Admin'&& req.user.role!=='User'){
         return res.status(402).json({msg:"Unauthorized access!!"})
     }
     next()
