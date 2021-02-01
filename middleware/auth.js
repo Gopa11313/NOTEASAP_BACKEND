@@ -5,7 +5,7 @@ module.exports.varifyUser=function(req,res,next){
     try{
         const token=req.headers.authorization.split(" ")[1];
         console.log(token)
-        const decodedData=jwt.varifyUser(token,'secretkey');
+        const decodedData=jwt.verify(token,'secretkey');
         User.findById({_id:decodedData.userId}).then(function(alldata){
             req.user=alldata;
             next()

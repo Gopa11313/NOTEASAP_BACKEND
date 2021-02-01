@@ -6,13 +6,14 @@ const auth=require("../middleware/auth")
 const { check, validationResult } = require('express-validator')
 
 router.post('/upload/note',
+    auth.varifyUser,
     [
         check('file', "please select the file").not().isEmpty(),
         check('level', "please enter level").not().isEmpty(),
         check('subject', "please enter subject").not().isEmpty(),
         check('topic', "please enter topic").not().isEmpty()
-    ]
-    , (req, res) => {
+    ],
+     (req, res) => {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
             var post_data = req.body;
