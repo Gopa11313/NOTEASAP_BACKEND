@@ -23,8 +23,9 @@ router.post("/user/add",
             var email=data1.email;
             var password=data1.password
             var image=data1.image
+            var role=data1.role
             const hash = bcrypt.hashSync(password, saltRounds);
-            var data=new Register({name:name,email:email,password:hash,image:image})
+            var data=new Register({name:name,email:email,password:hash,image:image,role:role})
             data.save().then(function(){
                 res.send(req.body)
                 res.status(201).json({Message:"User Register Success"})

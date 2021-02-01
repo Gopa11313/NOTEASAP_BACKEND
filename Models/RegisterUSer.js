@@ -15,8 +15,12 @@ const Register = mongoose.model('Register', {
     },
     image: {
         type: String
-    }
-    ,
+    },
+    role:{
+        type:String,
+        enum:['User','Admin'],
+        defult:'User'
+    },
     tokens: [{
         token: {
             type: String,
