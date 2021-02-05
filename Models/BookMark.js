@@ -4,7 +4,7 @@ const Bookmark=mongoose.model('Bookmark',{
         type:String,
         requried: true
     },
-    noteID:{
+    noteId:{
         type:String,
         requried: true
     },
