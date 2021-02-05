@@ -44,14 +44,14 @@ router.post('/user/login', (req, res) => {
     const body = req.body;
     Register.findOne({ email: body.email }).then(function (userData) {
         if (userData == null) {
-            return res.status(403).json({ Message: "Invalid User!!" })
+            return res.status(403).json({success:true, msg: "Invalid User!!" })
         }
         bcrypt.compare(body.password, userData.password, function (err, result) {
             if (result == false) {
-                return res.status(403).json({ Message: "Invalid User!!" })
+                return res.status(403).json({ success:true,msg: "Invalid User!!" })
             }
             const token = jwt.sign({ userId: userData._id }, 'secretkey');
-            res.status(200).json({ Message: "Login Successfull", token: token })
+            res.status(200).json({success:true, msg: "Login Successfull", token: token })
         })
 
     }).catch(function (e) {
@@ -66,9 +66,9 @@ router.put('/user/image/update/:UserID',
         const id = req.params.UserID
         const image = req.body.image;
         Register.updateOne({ _id: id }, { image: image }).then(function () {
-            res.status(200).json({ Message: "Update Successfull" })
+            res.status(200).json({success:true, msg: "Update Successfull" })
         }).catch(function (e) {
-            res.status(400).json({ msg: e })
+            res.status(400).json({success:false, msg: e })
         })
     })
 
@@ -81,7 +81,7 @@ router.put('/user/update/:UserID',
         const password = req.body.password
         const image = req.body.image
         Register.updateMany({ _id: id }, { name: name }, { email: email }, { password: password }, { image: image }).then(function () {
-            res.status(200).json({ Message: "Update Successfull" })
+            res.status(200).json({success:true, msg: "Update Successfull" })
         }).catch(function (e) {
             res.status(400).json({ msg: e })
         })
