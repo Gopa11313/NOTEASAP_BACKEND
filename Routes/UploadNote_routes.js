@@ -51,17 +51,19 @@ router.get('/get/notes/:userId',
         })
     })
 
-// router.delete("/delete/note/:Nid",
-//     auth.varifyUser,
-//     auth.varifyAdmin,
-//     auth.varifyCustomer, (req, res) => {
-//         const Nid = req.params.Nid;
-//         UploadNote.deleteOne({ _id: Nid }).then(function () {
-//             res.status(200).json({ msg: "Note Successfully deleted" })
-//         }).catch(function (e) {
-//             res.status(500).json({ msg: e })
-//         })
-//     })
 
+    //////////////////// yo ak patak sir lae dekhau 
+router.delete("/delete/note/:Nid",
+    auth.varifyUser,
+    auth.varifyAdminorUser, 
+   (req, res) => {
+        const Nid = req.params.Nid;
+        UploadNote.deleteOne({ _id: Nid }).then(function () {
+            res.status(200).json({ msg: "Note Successfully deleted" })
+        }).catch(function (e) {
+            res.status(500).json({ msg: e })
+        })
+    })
 
+//////also do update here
 module.exports = router
