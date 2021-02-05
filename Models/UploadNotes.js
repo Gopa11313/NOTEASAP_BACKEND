@@ -27,7 +27,8 @@ const UploadNote=mongoose.model('UploadNote',{
         type:Number
     },
     userId:{
-        type:String
+        type:String,
+        require:true
     }
 });
 module.exports=UploadNote;

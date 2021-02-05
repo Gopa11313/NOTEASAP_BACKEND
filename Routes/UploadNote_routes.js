@@ -10,7 +10,8 @@ router.post('/upload/note',
         check('file', "please select the file").not().isEmpty(),
         check('level', "please enter level").not().isEmpty(),
         check('subject', "please enter subject").not().isEmpty(),
-        check('topic', "please enter topic").not().isEmpty()
+        check('topic', "please enter topic").not().isEmpty(),
+        check('userId',"UserID is needed").not().isEmpty()
     ],
     auth.varifyUser,
     auth.varifyAdminorUser,
@@ -41,13 +42,14 @@ router.post('/upload/note',
         }
     })
 
-// router.get('/get/notes', auth.varifyUser,
-//     auth.varifyAdmin,
-//     auth.varifyCustomer, (req, res) => {
-//         UploadNotes.find().then(function (data) {
-//             res.send([data])
-//         })
-//     })
+router.get('/get/notes/:userId', 
+    auth.varifyUser,
+    auth.varifyAdminorUser, (req, res) => {
+        const userId=req.params.userId
+        UploadNotes.find({userId:userId}).then(function (data) {
+            res.status(200).json({success:true,list:data})
+        })
+    })
 
 // router.delete("/delete/note/:Nid",
 //     auth.varifyUser,
