@@ -30,4 +30,15 @@ router.post('/comment/on/note',
         }
 })
 
+router.put('/update/comment/:cmtId',
+    auth.varifyUser,
+    auth.varifyAdminorUser, (req, res) => {
+        var id=req.params.cmtId
+        const comment=req.body.comment
+        Comment.updateOne({_id:id,comment:comment}).then(function () {
+            res.status(200).json({success:true, msg: "Update Successfull" })
+        }).catch(function (e) {
+            res.status(400).json({success:true, msg: "Error" })
+        })
+    })
 module.exports=router
