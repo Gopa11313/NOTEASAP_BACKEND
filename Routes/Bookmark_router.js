@@ -30,6 +30,7 @@ router.post('/note/bookmark/',
         }
     })
 
+    /////// hernu prni chis
 router.delete('/delete/bookmark/:bookmarkId',
     auth.varifyUser,
     auth.varifyParticularUser, 

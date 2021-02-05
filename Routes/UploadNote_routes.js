@@ -30,10 +30,10 @@ router.post('/upload/note',
             var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, userId: userId })
             data.save().then(function () {
                 res.send(req.body)
-                res.status(201).json({ Message: "Note Uploaded Successfully" })
+                res.status(201).json({ success:true, msg: "Note Uploaded Successfully" })
             }).catch(function (e) {
                 res.send(e)
-                res.status(500).json({ Message: e })
+                res.status(500).json({ success:false,msg: e })
             })
         }
         else {
@@ -59,9 +59,9 @@ router.delete("/delete/note/:Nid",
    (req, res) => {
         const Nid = req.params.Nid;
         UploadNote.deleteOne({ _id: Nid }).then(function () {
-            res.status(200).json({ msg: "Note Successfully deleted" })
+            res.status(200).json({ success:true,msg: "Note Successfully deleted" })
         }).catch(function (e) {
-            res.status(500).json({ msg: e })
+            res.status(500).json({success:false, msg: e })
         })
     })
 
