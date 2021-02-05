@@ -7,6 +7,6 @@ const Bookmark=mongoose.model('Bookmark',{
     noteId:{
         type:String,
         requried: true
-    },
+    }
 });
 module.exports=Bookmark;
