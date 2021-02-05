@@ -5,7 +5,7 @@ const auth = require("../middleware/auth")
 const { check, validationResult } = require('express-validator');
 const { json } = require('body-parser');
 
-router.post('/note/bookmark/',
+router.post('/note/bookmark',
     [
         check('userId', "userId must be filled").not().isEmpty(),
         check('noteId', "NoteId must be filled").not().isEmpty()
@@ -38,7 +38,7 @@ router.delete('/delete/bookmark/:bookmarkId',
         BookMark.deleteOne({ _id: bookmarkId }).then(function () {
             res.status(200).json({ success:true,msg: "Bookmark Successfully deleted" })
         }).catch(function (e) {
-            res.status(500).json({ success:false,msg: e })
+            res.status(500).json({ success:false,msg: "error" })
         })
     })
 module.exports = router

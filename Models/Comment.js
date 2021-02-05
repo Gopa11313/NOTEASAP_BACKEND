@@ -8,9 +8,8 @@ const Comment=mongoose.model('Comment',{
         type:String,
         requried: true
     },
-    Comment:{
+    comment:{
         type:String
-
     }
 })
 module.exports=Comment;
