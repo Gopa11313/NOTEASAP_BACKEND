@@ -10,21 +10,21 @@ module.exports.varifyUser=function(req,res,next){
             req.user=alldata;
             next()
         }).catch(function(err){
-            return res.status(402).json({msg:"Unauthorized access!!"})
+            return res.status(402).json({success:true,msg:"Unauthorized access!!"})
         })
     }
     catch(err){
-        return res.status(402).json({msg:"Unauthorized access!!"})
+        return res.status(402).json({success:true,msg:"Unauthorized access!!"})
     }
 }
 
 //second gard
 module.exports.varifyAdmin=function(req,res,next){
     if(!req.user){
-        return res.status(402).json({msg:"Unauthorized access!!"})
+        return res.status(402).json({success:true,msg:"Unauthorized access!!"})
     }
     else if(req.user.role!=='Admin'){
-        return res.status(402).json({msg:"Unauthorized access!!"})
+        return res.status(402).json({success:true,msg:"Unauthorized access!!"})
     }
     next()
 }
@@ -32,10 +32,10 @@ module.exports.varifyAdmin=function(req,res,next){
 
 module.exports.varifyParticularUser=function(req,res,next){
     if(!req.user){
-        return res.status(402).json({msg:"Unauthorized access!!"})
+        return res.status(402).json({success:true,msg:"Unauthorized access!!"})
     }
     else if(req.user.role!=='User'){
-        return res.status(402).json({msg:"Unauthorized access!!"})
+        return res.status(402).json({success:true,msg:"Unauthorized access!!"})
     }
     next()
 }
@@ -43,10 +43,10 @@ module.exports.varifyParticularUser=function(req,res,next){
 
 module.exports.varifyAdminorUser=function(req,res,next){
     if(!req.user){
-        return res.status(402).json({msg:"Unauthorized access!!"})
+        return res.status(402).json({success:true,msg:"Unauthorized access!!"})
     }
     else if(req.user.role!=='Admin' && req.user.role!=='User'){
-        return res.status(402).json({msg:"Unauthorized access!!"})
+        return res.status(402).json({success:true,msg:"Unauthorized access!!"})
     }
     else if(req.user.role!=='User' || req.user.role!=='Admin'){
         next()

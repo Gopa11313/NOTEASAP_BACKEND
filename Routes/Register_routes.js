@@ -35,8 +35,7 @@ router.post("/user/add",
             })
         }
         else {
-            res.status(400).json(errros.array())
-            res.send(errros.array())
+            res.status(400).json({success:true,msg:errros.array()})
         }
     })
 
@@ -55,7 +54,7 @@ router.post('/user/login', (req, res) => {
         })
 
     }).catch(function (e) {
-        res.send(e)
+        res.status(500).json({success:false,msg:e})
     })
 })
 
@@ -83,7 +82,7 @@ router.put('/user/update/:UserID',
         Register.updateMany({ _id: id }, { name: name }, { email: email }, { password: password }, { image: image }).then(function () {
             res.status(200).json({success:true, msg: "Update Successfull" })
         }).catch(function (e) {
-            res.status(400).json({ msg: e })
+            res.status(400).json({success:true, msg: e })
         })
     })
 module.exports = router

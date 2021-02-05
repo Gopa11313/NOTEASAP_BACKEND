@@ -25,8 +25,7 @@ router.post('/note/bookmark/',
             })
         }
         else {
-            res.status(400).json(errros.array())
-            res.send(errros.array())
+            res.status(400).json({succes:true,msg:errros.array()})
         }
     })
 

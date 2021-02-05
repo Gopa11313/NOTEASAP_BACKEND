@@ -37,8 +37,7 @@ router.post('/upload/note',
             })
         }
         else {
-            res.status(400).json(errors.array())
-            res.send(errors.array())
+            res.status(400).json({success:true,msg:errors.array()})
         }
     })
 
