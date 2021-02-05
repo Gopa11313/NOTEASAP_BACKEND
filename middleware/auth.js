@@ -51,5 +51,4 @@ module.exports.varifyAdminorUser=function(req,res,next){
     else if(req.user.role!=='User' || req.user.role!=='Admin'){
         next()
     }
-    
 }
