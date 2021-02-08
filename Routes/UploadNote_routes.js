@@ -34,7 +34,6 @@ router.post('/upload/note',
                 res.send(req.body)
                 res.status(201).json({ success: true, msg: "Note Uploaded Successfully" })
             }).catch(function (e) {
-                res.send(e)
                 res.status(500).json({ success: false, msg: e })
             })
         }

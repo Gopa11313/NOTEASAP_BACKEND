@@ -32,7 +32,7 @@ router.post("/user/add",
             data.save().then(function () {
                 res.status(200).json({ success:true ,msg: "User Register Success" })
             }).catch(function (e) {
-                res.status(201).json({ success:false,msg: "error"})
+                res.status(201).json({ success:false,msg: "Some Error Occurs"})
             })
         }
         else {
@@ -44,11 +44,11 @@ router.post('/user/login', (req, res) => {
     const body = req.body;
     Register.findOne({ email: body.email }).then(function (userData) {
         if (userData == null) {
-            return res.status(403).json({success:true, msg: "Invalid User!!" })
+            return res.status(201).json({success:true, msg: "Invalid User!!" })
         }
         bcrypt.compare(body.password, userData.password, function (err, result) {
             if (result == false) {
-                return res.status(403).json({ success:true,msg: "Invalid User!!" })
+                return res.status(201).json({ success:true,msg: "Invalid User!!" })
             }
             const token = jwt.sign({ userId: userData._id }, 'secretkey');
             res.status(200).json({success:true, msg: "Login Successfull", token: token })
@@ -88,4 +88,16 @@ router.put('/user/update/:UserID',
             res.status(400).json({success:true, msg: e })
         })
     })
+
+    // router.get("/get/me",
+    // auth.varifyUser,
+    // (req,res)=>{
+    //     const user = await User.findById(req.user.id);
+    //     res.status(200).json({​​​​
+    //       success: true,
+    //       data: user,
+    
+    //     }​​​​);
+
+    // })
 module.exports = router
