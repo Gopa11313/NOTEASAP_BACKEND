@@ -3,6 +3,7 @@ const UploadNote = require('../Models/UploadNotes');
 const router = express.Router();
 const UploadNotes = require('../Models/UploadNotes');
 const auth = require("../middleware/auth")
+const upload=require("../middleware/upload")
 const { check, validationResult } = require('express-validator')
 
 router.post('/upload/note',
@@ -11,10 +12,11 @@ router.post('/upload/note',
         check('level', "please enter level").not().isEmpty(),
         check('subject', "please enter subject").not().isEmpty(),
         check('topic', "please enter topic").not().isEmpty(),
-        check('userId',"UserID is needed").not().isEmpty()
+        check('userId', "UserID is needed").not().isEmpty()
     ],
     auth.varifyUser,
     auth.varifyAdminorUser,
+    upload.single('pimage'),
     (req, res) => {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
@@ -26,43 +28,54 @@ router.post('/upload/note',
             var topic = post_data.topic;
             var description = post_data.description;
             var ratting = 1
-            var userId=post_data.userId
+            var userId = post_data.userId
             var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, userId: userId })
             data.save().then(function () {
                 res.send(req.body)
-                res.status(201).json({ success:true, msg: "Note Uploaded Successfully" })
+                res.status(201).json({ success: true, msg: "Note Uploaded Successfully" })
             }).catch(function (e) {
                 res.send(e)
-                res.status(500).json({ success:false,msg: e })
+                res.status(500).json({ success: false, msg: e })
             })
         }
         else {
-            res.status(400).json({success:true,msg:errors.array()})
+            res.status(400).json({ success: true, msg: errors.array() })
         }
     })
 
-router.get('/get/notes/:userId', 
+router.get('/get/notes/:userId',
     auth.varifyUser,
     auth.varifyAdminorUser, (req, res) => {
-        const userId=req.params.userId
-        UploadNotes.find({userId:userId}).then(function (data) {
-            res.status(200).json({success:true,list:data})
+        const userId = req.params.userId
+        UploadNotes.find({ userId: userId }).then(function (data) {
+            res.status(200).json({ success: true, list: data })
         })
     })
 
 
-    //////////////////// yo ak patak sir lae dekhau 
+//////////////////// yo ak patak sir lae dekhau 
 router.delete("/delete/note/:Nid",
     auth.varifyUser,
-    auth.varifyAdminorUser, 
-   (req, res) => {
+    auth.varifyAdminorUser,
+    (req, res) => {
         const Nid = req.params.Nid;
         UploadNote.deleteOne({ _id: Nid }).then(function () {
-            res.status(200).json({ success:true,msg: "Note Successfully deleted" })
+            res.status(200).json({ success: true, msg: "Note Successfully deleted" })
         }).catch(function (e) {
-            res.status(500).json({success:false, msg: e })
+            res.status(500).json({ success: false, msg: e })
         })
     })
 
+
+
+router.get('/notes/showall',
+    auth.varifyUser,
+    auth.varifyAdminorUser, (req, res) => {
+        UploadNote.find().then(function (data) {
+            res.status(200).json({ success: true, data: data })
+        }).catch(function (e) {
+            res.status(500).json({ success: false, msg: e })
+        })
+    })
 //////also do update here
 module.exports = router

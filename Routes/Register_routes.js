@@ -6,6 +6,7 @@ const Register = require('../Models/RegisterUSer');
 const { response } = require('express');
 const saltRounds = 10;
 const auth = require("../middleware/auth")
+const upload=require("../middleware/upload")
 const { check, validationResult } = require('express-validator');
 const { json } = require('body-parser');
 
@@ -61,9 +62,11 @@ router.post('/user/login', (req, res) => {
 router.put('/user/image/update/:UserID',
     auth.varifyUser,
     auth.varifyParticularUser,
+    upload.single('image'),
     (req, res) => {
+        console.log(req.file)
         const id = req.params.UserID
-        const image = req.body.image;
+        const image = req.file;
         Register.updateOne({ _id: id }, { image: image }).then(function () {
             res.status(200).json({success:true, msg: "Update Successfull" })
         }).catch(function (e) {

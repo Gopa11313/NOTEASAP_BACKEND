@@ -19,8 +19,7 @@ const Register = mongoose.model('Register', {
     role:{
         type:String,
         enum:['User','Admin'],
-        defult:'User',
-        required: true
+        defult:'User'
     },
     tokens: [{
         token: {
