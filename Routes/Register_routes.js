@@ -24,18 +24,18 @@ router.post("/user/add",
             var email = data1.email;
             var password = data1.password
             var image = data1.image
-            var role = data1.role
+            var role = "User"
+            console.log("Hello")
             const hash = bcrypt.hashSync(password, saltRounds);
             var data = new Register({ name: name, email: email, password: hash, image: image, role: role })
             data.save().then(function () {
-                res.status(201).json({ success:true ,msg: "User Register Success" })
+                res.status(200).json({ success:true ,msg: "User Register Success" })
             }).catch(function (e) {
-                res.send(e)
-                res.status(500).json({ success:false,msg: "error"})
+                res.status(201).json({ success:false,msg: "error"})
             })
         }
         else {
-            res.status(400).json({success:true,msg:errros.array()})
+            res.status(201).json({success:false,msg:"Error"})
         }
     })
 
