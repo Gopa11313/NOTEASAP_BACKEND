@@ -66,7 +66,7 @@ router.put('/user/image/update/:UserID',
     (req, res) => {
         console.log(req.file)
         const id = req.params.UserID
-        const image = req.file;
+        const image = req.file.path;
         Register.updateOne({ _id: id }, { image: image }).then(function () {
             res.status(200).json({success:true, msg: "Update Successfull" })
         }).catch(function (e) {
