@@ -6,7 +6,7 @@ const Register = require('../Models/RegisterUSer');
 const { response } = require('express');
 const saltRounds = 10;
 const auth = require("../middleware/auth")
-const upload=require("../middleware/upload")
+const upload = require("../middleware/upload")
 const { check, validationResult } = require('express-validator');
 const { json } = require('body-parser');
 
@@ -30,13 +30,13 @@ router.post("/user/add",
             const hash = bcrypt.hashSync(password, saltRounds);
             var data = new Register({ name: name, email: email, password: hash, image: image, role: role })
             data.save().then(function () {
-                res.status(200).json({ success:true ,msg: "User Register Success" })
+                res.status(200).json({ success: true, msg: "User Register Success" })
             }).catch(function (e) {
-                res.status(201).json({ success:false,msg: "Some Error Occurs"})
+                res.status(201).json({ success: false, msg: "Some Error Occurs" })
             })
         }
         else {
-            res.status(201).json({success:false,msg:"Error"})
+            res.status(201).json({ success: false, msg: "Error" })
         }
     })
 
@@ -44,18 +44,18 @@ router.post('/user/login', (req, res) => {
     const body = req.body;
     Register.findOne({ email: body.email }).then(function (userData) {
         if (userData == null) {
-            return res.status(201).json({success:true, msg: "Invalid User!!" })
+            return res.status(201).json({ success: true, msg: "Invalid User!!" })
         }
         bcrypt.compare(body.password, userData.password, function (err, result) {
             if (result == false) {
-                return res.status(201).json({ success:true,msg: "Invalid User!!" })
+                return res.status(201).json({ success: true, msg: "Invalid User!!" })
             }
             const token = jwt.sign({ userId: userData._id }, 'secretkey');
-            res.status(200).json({success:true, msg: "Login Successfull", token: token })
+            res.status(200).json({ success: true, msg: "Login Successfull", token: token })
         })
 
     }).catch(function (e) {
-        res.status(500).json({success:false,msg:e})
+        res.status(500).json({ success: false, msg: e })
     })
 })
 
@@ -65,13 +65,18 @@ router.put('/user/image/update/:UserID',
     upload.single('image'),
     (req, res) => {
         console.log(req.file)
-        const id = req.params.UserID
-        const image = req.file.path;
-        Register.updateOne({ _id: id }, { image: image }).then(function () {
-            res.status(200).json({success:true, msg: "Update Successfull" })
-        }).catch(function (e) {
-            res.status(400).json({success:false, msg: e })
-        })
+        if (req.file == undefined) {
+            return res.status(200).json({ success: false, msg: "invalid image type" })
+        }
+        else {
+            const id = req.params.UserID
+            const image = req.file.path;
+            Register.updateOne({ _id: id }, { image: image }).then(function () {
+                res.status(200).json({ success: true, msg: "Update Successfull" })
+            }).catch(function (e) {
+                res.status(400).json({ success: false, msg: e })
+            })
+        }
     })
 
 router.put('/user/update/:UserID',
@@ -83,21 +88,21 @@ router.put('/user/update/:UserID',
         const password = req.body.password
         const image = req.body.image
         Register.updateMany({ _id: id }, { name: name }, { email: email }, { password: password }, { image: image }).then(function () {
-            res.status(200).json({success:true, msg: "Update Successfull" })
+            res.status(200).json({ success: true, msg: "Update Successfull" })
         }).catch(function (e) {
-            res.status(400).json({success:true, msg: e })
+            res.status(400).json({ success: true, msg: e })
         })
     })
 
-    // router.get("/get/me",
-    // auth.varifyUser,
-    // (req,res)=>{
-    //     const user = await User.findById(req.user.id);
-    //     res.status(200).json({​​​​
-    //       success: true,
-    //       data: user,
-    
-    //     }​​​​);
+// router.get("/get/me",
+// auth.varifyUser,
+// (req,res)=>{
+//     const user = await User.findById(req.user.id);
+//     res.status(200).json({​​​​
+//       success: true,
+//       data: user,
 
-    // })
+//     }​​​​);
+
+// })
 module.exports = router

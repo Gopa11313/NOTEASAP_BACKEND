@@ -8,9 +8,18 @@ const storage=multer.diskStorage({
         cb(null,Date.now()+"NoTEASAP"+file.originalname)
     }
 });
+const filefilter=function (req,file,cb) {
+    if(file.mimetype=='image/jpeg' || file.mimetype=='image/png' || file.mimetype=='image/gif'){
+        cb(null,true)
+    }
+    else{
+        cb(null,false)
+    }
+}
 
 const  upload=multer({
-    storage:storage
+    storage:storage,
+    fileFilter:filefilter
 })
 
 module.exports=upload;

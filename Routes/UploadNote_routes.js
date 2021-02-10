@@ -3,7 +3,7 @@ const UploadNote = require('../Models/UploadNotes');
 const router = express.Router();
 const UploadNotes = require('../Models/UploadNotes');
 const auth = require("../middleware/auth")
-const upload=require("../middleware/upload")
+const upload = require("../middleware/upload")
 const { check, validationResult } = require('express-validator');
 const uploadfile = require('../middleware/uploadfile');
 
@@ -21,22 +21,27 @@ router.post('/upload/note',
     (req, res) => {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
-            var post_data = req.body;
-            var file = req.file.path;
-            var level = post_data.level;
-            var subject = post_data.level;
-            var c_name = post_data.c_name;
-            var topic = post_data.topic;
-            var description = post_data.description;
-            var ratting = 1
-            var userId = post_data.userId
-            var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, userId: userId })
-            data.save().then(function () {
-                res.send(req.body)
-                res.status(201).json({ success: true, msg: "Note Uploaded Successfully" })
-            }).catch(function (e) {
-                res.status(500).json({ success: false, msg: e })
-            })
+            if (req.file == undefined) {
+                return res.status(200).json({ success: false, msg: "invalid file type" })
+            }
+            else {
+                var post_data = req.body;
+                var file = req.file.path;
+                var level = post_data.level;
+                var subject = post_data.level;
+                var c_name = post_data.c_name;
+                var topic = post_data.topic;
+                var description = post_data.description;
+                var ratting = 1
+                var userId = post_data.userId
+                var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, userId: userId })
+                data.save().then(function () {
+                    res.send(req.body)
+                    res.status(201).json({ success: true, msg: "Note Uploaded Successfully" })
+                }).catch(function (e) {
+                    res.status(500).json({ success: false, msg: e })
+                })
+            }
         }
         else {
             res.status(400).json({ success: true, msg: errors.array() })
@@ -53,7 +58,6 @@ router.get('/get/notes/:userId',
     })
 
 
-//////////////////// yo ak patak sir lae dekhau 
 router.delete("/delete/note/:Nid",
     auth.varifyUser,
     auth.varifyAdminorUser,
