@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
     } else {
         cb({
             success: false,
-            message: 'Invalid file type. Only jpg, png image files are allowed.'
+            msg: 'Invalid file type. Only jpg, png image files are allowed.'
         }, false);
     }
   };
@@ -39,13 +39,13 @@ const storage = multer.diskStorage({
             return res.json(error);
         } else {
             if (!req.file) {
-                res.status(500);
-                res.json('file not found');
+                res.status(500).json({success:false,msg:'file not found'});
+                // res.json('file not found');
             }
             res.status(200);
             res.json({
                 success: true,
-                message: 'File uploaded successfully!'
+                msg: 'File uploaded successfully!'
             });
         }
     })
