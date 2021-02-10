@@ -62,13 +62,8 @@ router.post('/user/login', (req, res) => {
 router.put('/user/image/update/:UserID',
     auth.varifyUser,
     auth.varifyParticularUser,
-    upload.single('image'),
+    upload,
     (req, res) => {
-        console.log(req.file)
-        if (req.file == undefined) {
-            return res.status(200).json({ success: false, msg: "invalid image type" })
-        }
-        else {
             const id = req.params.UserID
             const image = req.file.path;
             Register.updateOne({ _id: id }, { image: image }).then(function () {
@@ -77,7 +72,7 @@ router.put('/user/image/update/:UserID',
                 res.status(400).json({ success: false, msg: e })
             })
         }
-    })
+    )
 
 router.put('/user/update/:UserID',
     auth.varifyUser,
