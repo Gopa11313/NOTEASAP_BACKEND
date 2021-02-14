@@ -26,7 +26,6 @@ router.post("/user/add",
             var password = data1.password
             var image = data1.image
             var role = "User"
-            console.log("Hello")
             const hash = bcrypt.hashSync(password, saltRounds);
             var data = new Register({ name: name, email: email, password: hash, image: image, role: role })
             data.save().then(function () {
@@ -44,11 +43,11 @@ router.post('/user/login', (req, res) => {
     const body = req.body;
     Register.findOne({ email: body.email }).then(function (userData) {
         if (userData == null) {
-            return res.status(201).json({ success: true, msg: "Invalid User!!" })
+            return res.status(201).json({ success: false, msg: "Invalid User!!" })
         }
         bcrypt.compare(body.password, userData.password, function (err, result) {
             if (result == false) {
-                return res.status(201).json({ success: true, msg: "Invalid User!!" })
+                return res.status(201).json({ success: false, msg: "Invalid User!!" })
             }
             const token = jwt.sign({ userId: userData._id }, 'secretkey');
             res.status(200).json({ success: true, msg: "Login Successfull", token: token })
