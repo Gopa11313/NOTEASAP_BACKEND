@@ -1,53 +1,25 @@
 const multer = require('multer')
-
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, './images');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "./public/images");
     },
-    filename: (req, file, callback) => {
-        callback(null, Date.now() + 'NOTEASAP' + file.originalname);
-    }
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + 'NOTEASAP' + file.originalname);
+    },
   });
-   
-  let fileFilter = function (req, file, cb) {
-    var allowedMimes = ['image/jpeg', 'image/pjpeg', 'image/png'];
-    if (allowedMimes.includes(file.mimetype)) {
-        cb(null, true);
+const maxSize = 1 * 1024 * 1024; // for 1MB
+
+var upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    console.log("hello" )
+    if ( file.mimetype == "image/png" ||file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+      cb(null, true);
     } else {
-        cb({
-            success: false,
-            msg: 'Invalid file type. Only jpg, png image files are allowed.'
-        }, false);
+      cb({success: false,
+        msg: 'Invalid file type. Only jpg, png image files are allowed.'},false);
     }
-  };
-  let obj = {
-    storage: storage,
-    limits: {
-        fileSize: 2 * 1024 * 1024
   },
-    fileFilter: fileFilter
-  };
-  const upload = multer(obj).single('image'); // upload.single('file')
-  fileUpload = (req, res) => {
-    upload(req, res, function (error) {
-        if (error) { //instanceof multer.MulterError
-            res.status(500);
-            if (error.code == 'LIMIT_FILE_SIZE') {
-                error.message = 'File Size is too large. Allowed file size is 200KB';
-                error.success = false;
-            }
-            return res.json(error);
-        } else {
-            if (!req.file) {
-                res.status(500).json({success:false,msg:'file not found'});
-                // res.json('file not found');
-            }
-            res.status(200);
-            res.json({
-                success: true,
-                msg: 'File uploaded successfully!'
-            });
-        }
-    })
-  };
-  module.exports = fileUpload
+  limits: { fileSize: maxSize },
+}).single('file');
+module.exports = upload

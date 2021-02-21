@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs')
 const Register = require('../Models/RegisterUSer');
 const { response } = require('express');
 const saltRounds = 10;
+const multer = require("multer");
 const auth = require("../middleware/auth")
 const upload = require("../middleware/upload")
 const { check, validationResult } = require('express-validator');
@@ -24,7 +25,7 @@ router.post("/user/add",
             var name = data1.name;
             var email = data1.email;
             var password = data1.password
-            var image = data1.image
+            var image = "this is image"
             var role = "User"
             const hash = bcrypt.hashSync(password, saltRounds);
             var data = new Register({ name: name, email: email, password: hash, image: image, role: role })
@@ -42,15 +43,21 @@ router.post("/user/add",
 router.post('/user/login', (req, res) => {
     const body = req.body;
     Register.findOne({ email: body.email }).then(function (userData) {
+        //console.log(r)
         if (userData == null) {
             return res.status(201).json({ success: false, msg: "Invalid User!!" })
         }
         bcrypt.compare(body.password, userData.password, function (err, result) {
             if (result == false) {
-                return res.status(201).json({ success: false, msg: "Invalid User!!" })
+                return res.status(201).json({ success: false, msg: "Invalid User!" })
             }
-            const token = jwt.sign({ userId: userData._id }, 'secretkey');
-            res.status(200).json({ success: true, msg: "Login Successfull", token: token })
+            Register.find({ email: req.body.email }).then(function (data) {
+                const token = jwt.sign({ userId: userData._id }, 'secretkey');
+                //console.log(data)
+                res.status(200).json({ success: true, msg: "Login Successfull", token: token, data: data,  id: userData._id})
+            }).catch(function (e) {
+
+            })
         })
 
     }).catch(function (e) {
@@ -58,45 +65,58 @@ router.post('/user/login', (req, res) => {
     })
 })
 
-router.put('/user/image/update/:UserID',
-    auth.varifyUser,
-    auth.varifyParticularUser,
-    upload,
-    (req, res) => {
-            const id = req.params.UserID
-            const image = req.file.path;
-            Register.updateOne({ _id: id }, { image: image }).then(function () {
-                res.status(200).json({ success: true, msg: "Update Successfull" })
+
+router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
+    //console.log(req.file)
+    const id = req.params.id
+    upload(req, res, function (err) {
+        
+        if (err instanceof multer.MulterError) {
+            // A Multer error occurred when uploading.
+            res.status(201).json({success:false,msg:"error"})
+        } 
+        else if (err) {
+             // An unknown error occurred when uploading.
+            //console.log("hello")
+            res.status(201).json({success:false, msg:"not gonna happen"})
+        }
+        else {
+            //console.log(req.file)
+            const id = req.params.id
+            //console.log("hello")
+            image=req.file.filename
+            Register.updateOne({ _id: id }, {image:image }).then(function () {
+                res.status(200).json({ success: true, msg: "Done" })
             }).catch(function (e) {
-                res.status(400).json({ success: false, msg: e })
+                res.status(201).json({ success: false, msg: "not register" })
             })
         }
-    )
+    })
+})
 
 router.put('/user/update/:UserID',
-    auth.varifyUser,
-    auth.varifyAdminorUser, (req, res) => {
-        const id = req.params.UserID
-        const name = req.body.name;
-        const email = req.body.email;
-        const password = req.body.password
-        const image = req.body.image
-        Register.updateMany({ _id: id }, { name: name }, { email: email }, { password: password }, { image: image }).then(function () {
-            res.status(200).json({ success: true, msg: "Update Successfull" })
-        }).catch(function (e) {
-            res.status(400).json({ success: true, msg: e })
+        auth.varifyUser,
+        auth.varifyAdminorUser, (req, res) => {
+            const id = req.params.UserID
+            const name = req.body.name;
+            const email = req.body.email;
+            const password = req.body.password
+            const image = req.body.image
+            Register.updateMany({ _id: id }, { name: name, email: email, password: password, image: image }).then(function () {
+                res.status(200).json({ success: true, msg: "Update Successfull" })
+            }).catch(function (e) {
+                res.status(400).json({ success: true, msg: e })
+            })
         })
-    })
 
-// router.get("/get/me",
-// auth.varifyUser,
-// (req,res)=>{
-//     const user = await User.findById(req.user.id);
-//     res.status(200).json({​​​​
-//       success: true,
-//       data: user,
+// router.get('/get/me',
+//     auth.varifyUser,
+//     (req, res) => {
+//         Register.find({ email: req.body.email }).then(function (data) {
+//             res.status(200).json({ success: true, data: data })
+//         }).catch(function (e) {
+//             res.status(200).json({ success: false, msg: e })
+//         })
 
-//     }​​​​);
-
-// })
+//     })
 module.exports = router

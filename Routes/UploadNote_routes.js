@@ -3,7 +3,7 @@ const UploadNote = require('../Models/UploadNotes');
 const router = express.Router();
 const UploadNotes = require('../Models/UploadNotes');
 const auth = require("../middleware/auth")
-const upload = require("../middleware/upload")
+const fileupload = require("../middleware/uploadfile")
 const { check, validationResult } = require('express-validator');
 const uploadfile = require('../middleware/uploadfile');
 
@@ -17,7 +17,6 @@ router.post('/upload/note',
     ],
     auth.varifyUser,
     auth.varifyAdminorUser,
-    uploadfile.single('file'),
     (req, res) => {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
@@ -26,7 +25,7 @@ router.post('/upload/note',
             }
             else {
                 var post_data = req.body;
-                var file = req.file.path;
+                var file = "nofile";
                 var level = post_data.level;
                 var subject = post_data.level;
                 var c_name = post_data.c_name;
