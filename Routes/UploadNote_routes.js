@@ -9,7 +9,7 @@ const uploadfile = require('../middleware/uploadfile');
 
 router.post('/upload/note',
     [
-        check('file', "please select the file").not().isEmpty(),
+       // check('file', "please select the file").not().isEmpty(),
         check('level', "please enter level").not().isEmpty(),
         check('subject', "please enter subject").not().isEmpty(),
         check('topic', "please enter topic").not().isEmpty(),
@@ -19,15 +19,12 @@ router.post('/upload/note',
     auth.varifyAdminorUser,
     (req, res) => {
         const errors = validationResult(req);
+       
         if (errors.isEmpty()) {
-            if (req.file == undefined) {
-                return res.status(200).json({ success: false, msg: "invalid file type" })
-            }
-            else {
                 var post_data = req.body;
                 var file = "nofile";
                 var level = post_data.level;
-                var subject = post_data.level;
+                var subject = post_data.subject;
                 var c_name = post_data.c_name;
                 var topic = post_data.topic;
                 var description = post_data.description;
@@ -35,15 +32,15 @@ router.post('/upload/note',
                 var userId = post_data.userId
                 var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, userId: userId })
                 data.save().then(function () {
-                    res.send(req.body)
-                    res.status(201).json({ success: true, msg: "Note Uploaded Successfully" })
+                    res.status(200).json({ success: true, msg: "User Register Success" })
                 }).catch(function (e) {
-                    res.status(500).json({ success: false, msg: e })
+                    console.log("here")
+                    res.status(201).json({ success: false, msg: "Some Error Occurs" })
                 })
-            }
         }
         else {
-            res.status(400).json({ success: true, msg: errors.array() })
+            console.log(errors)
+            res.status(201).json({ success: false, msg: "error" })
         }
     })
 
@@ -52,7 +49,11 @@ router.get('/get/notes/:userId',
     auth.varifyAdminorUser, (req, res) => {
         const userId = req.params.userId
         UploadNotes.find({ userId: userId }).then(function (data) {
-            res.status(200).json({ success: true, list: data })
+            console.log(data)
+            res.status(200).json({ success: true, data: data })
+        }).catch(function (e) {
+            console.log("here")
+            res.status(201).json({ success: false, msg: "Some Error Occurs" })
         })
     })
 
