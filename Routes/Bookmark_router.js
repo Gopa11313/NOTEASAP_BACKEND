@@ -25,20 +25,33 @@ router.post('/note/bookmark',
             })
         }
         else {
-            res.status(400).json({succes:true,msg:errros.array()})
+            res.status(400).json({ succes: true, msg: errros.array() })
         }
     })
+router.get('/bookmark/notes/:id',
+    auth.varifyUser,
+    auth.varifyAdminorUser, (req, res) => {
+        const userId = req.params.id
+        BookMark.find({ userId: userId }).then(function (data) {
+            //console.log(data)
+            res.status(200).json({ success: true, data: data })
+        }).catch(function (e) {
 
-    /////// hernu prni chis
+            res.status(201).json({ success: false, msg: "Some Error Occurs" })
+        })
+    })
+
+/////// hernu prni chis
 router.delete('/delete/bookmark/:bookmarkId',
     auth.varifyUser,
-    auth.varifyParticularUser, 
+    auth.varifyParticularUser,
     (req, res) => {
         const bookmarkId = req.params.bookmarkId;
         BookMark.deleteOne({ _id: bookmarkId }).then(function () {
-            res.status(200).json({ success:true,msg: "Bookmark Successfully deleted" })
+            res.status(200).json({ success: true, msg: "Bookmark Successfully deleted" })
         }).catch(function (e) {
-            res.status(500).json({ success:false,msg: "error" })
+            res.status(500).json({ success: false, msg: "error" })
         })
     })
+
 module.exports = router

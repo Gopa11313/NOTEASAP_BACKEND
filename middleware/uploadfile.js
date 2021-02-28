@@ -1,7 +1,7 @@
 const multer = require('multer')
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "./public/images");
+      cb(null, "./public/files");
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + 'NOTEASAP' + file.originalname);
@@ -13,7 +13,7 @@ var upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
     console.log(file )
-    if ( file.mimetype == "file/pdf" ||file.mimetype == "image/doc" || file.mimetype == "image/zip" ||file.mimetype=="file/") {
+    if ( file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||file.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation" || file.mimetype == "application/zip" ||file.mimetype=="file/pptx") {
       cb(null, true);
     } else {
       cb({success: false,
