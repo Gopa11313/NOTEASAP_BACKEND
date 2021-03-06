@@ -43,7 +43,6 @@ router.post("/user/add",
 router.post('/user/login', (req, res) => {
     const body = req.body;
     Register.findOne({ email: body.email }).then(function (userData) {
-        //console.log(r)
         if (userData == null) {
             return res.status(201).json({ success: false, msg: "Invalid User!!" })
         }
@@ -109,14 +108,14 @@ router.put('/user/update/:UserID',
             })
         })
 
-// router.get('/get/me',
-//     auth.varifyUser,
-//     (req, res) => {
-//         Register.find({ email: req.body.email }).then(function (data) {
-//             res.status(200).json({ success: true, data: data })
-//         }).catch(function (e) {
-//             res.status(200).json({ success: false, msg: e })
-//         })
-
-//     })
+router.get('/get/me/:id',
+    auth.varifyUser,
+    (req, res) => {
+        const id=req.params.id
+        Register.find({ _id:id }).then(function (data) {
+            res.status(200).json({ success: true, data: data })
+        }).catch(function (e) {
+            res.status(200).json({ success: false, msg: e })
+        })
+    })
 module.exports = router

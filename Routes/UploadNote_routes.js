@@ -59,7 +59,7 @@ router.put("/upload/user/file/:id", auth.varifyUser, (req, res) => {
             res.status(201).json({ success: false, msg: "not gonna happen" })
         }
         else {
-            //console.log(req.file)
+            console.log(req.file)
             const id = req.params.id
             //console.log("hello")
             file = req.file.filename
@@ -71,7 +71,19 @@ router.put("/upload/user/file/:id", auth.varifyUser, (req, res) => {
         }
     })
 })
-router.get('/get/notes/:userId',
+router.get('/get/notes',
+    auth.varifyUser,
+    auth.varifyAdminorUser, (req, res) => {
+        const userId = req.params.userId
+        UploadNotes.find().then(function (data) {
+            //console.log(data)
+            res.status(200).json({ success: true, data: data })
+        }).catch(function (e) {
+            console.log("here")
+            res.status(201).json({ success: false, msg: "Some Error Occurs" })
+        })
+    })
+router.get('/get/Ownnotes/:userId',
     auth.varifyUser,
     auth.varifyAdminorUser, (req, res) => {
         const userId = req.params.userId
