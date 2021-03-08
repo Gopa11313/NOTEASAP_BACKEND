@@ -66,23 +66,17 @@ router.post('/user/login', (req, res) => {
 
 
 router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
-    //console.log(req.file)
     const id = req.params.id
     upload(req, res, function (err) {
-        
         if (err instanceof multer.MulterError) {
-            // A Multer error occurred when uploading.
+            console.log("here")
             res.status(201).json({success:false,msg:"error"})
         } 
         else if (err) {
-             // An unknown error occurred when uploading.
-            //console.log("hello")
             res.status(201).json({success:false, msg:"not gonna happen"})
         }
         else {
-            //console.log(req.file)
             const id = req.params.id
-            //console.log("hello")
             image=req.file.filename
             Register.updateOne({ _id: id }, {image:image }).then(function () {
                 res.status(200).json({ success: true, msg: "Done" })
@@ -100,11 +94,12 @@ router.put('/user/update/:UserID',
             const name = req.body.name;
             const email = req.body.email;
             const password = req.body.password
-            const image = req.body.image
-            Register.updateMany({ _id: id }, { name: name, email: email, password: password, image: image }).then(function () {
+            const image="noimg"
+            const hash = bcrypt.hashSync(password, saltRounds);
+            Register.updateOne({ _id: id }, { name: name, email: email, password: hash,image:image}).then(function () {
                 res.status(200).json({ success: true, msg: "Update Successfull" })
             }).catch(function (e) {
-                res.status(400).json({ success: true, msg: e })
+                res.status(201).json({ success: true, msg: "error here" })
             })
         })
 

@@ -101,7 +101,7 @@ router.get('/note/by/notid/:id',
     auth.varifyAdminorUser, (req, res) => {
         const id = req.params.id
         UploadNotes.find({ _id: id }).then(function (data) {
-            console.log(data)
+           // console.log(data)
             res.status(200).json({ success: true, data: data })
         }).catch(function (e) {
             console.log("here")

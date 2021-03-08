@@ -34,7 +34,7 @@ router.get('/bookmark/notes/:id',
     auth.varifyAdminorUser, (req, res) => {
         const userId = req.params.id
         BookMark.find({ userId: userId }).then(function (data) {
-            //console.log(data)
+            console.log(data)
             res.status(200).json({ success: true, data: data })
         }).catch(function (e) {
 
@@ -60,15 +60,16 @@ router.get('/bookmark/notes/by/note/user/:id'),
 
 
 /////// hernu prni chis
-router.delete('/delete/bookmark/:bookmarkId',
+router.delete('/delete/bookmark/:noteId',
     auth.varifyUser,
     auth.varifyParticularUser,
     (req, res) => {
-        const bookmarkId = req.params.bookmarkId;
-        BookMark.deleteOne({ _id: bookmarkId }).then(function () {
+        const noteId = req.params.noteId;
+        BookMark.deleteOne({noteId:noteId}).then(function () {
+            console.log("here")
             res.status(200).json({ success: true, msg: "Bookmark Successfully deleted" })
         }).catch(function (e) {
-            res.status(500).json({ success: false, msg: "error" })
+            res.status(201).json({ success: false, msg: "error" })
         })
     })
 

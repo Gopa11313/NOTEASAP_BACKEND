@@ -14,31 +14,43 @@ router.post('/comment/on/note',
     auth.varifyParticularUser, (req, res) => {
         const errros = validationResult(req);
         if (errros.isEmpty()) {
-                var post_data=req.body
-                var userId=post_data.userId
-                var noteId=post_data.noteId
-                var comment=post_data.comment
-                var cmnt=Comment({userId:userId,noteId:noteId,comment:comment})
-                cmnt.save().then(function () {
-                    res.status(201).json({ success: true, msg: "Commented" })
-                }).catch(function (e) {
-                    res.status(500).json({ success: false, msg: "error" })
-                })
+            var post_data = req.body
+            var userId = post_data.userId
+            var noteId = post_data.noteId
+            var comment = post_data.comment
+            var cmnt = Comment({ userId: userId, noteId: noteId, comment: comment })
+            cmnt.save().then(function () {
+                res.status(201).json({ success: true, msg: "Commented" })
+            }).catch(function (e) {
+                res.status(500).json({ success: false, msg: "error" })
+            })
         }
-        else{
-            res.status(400).json({succes:true,msg:errros.array()})
+        else {
+            res.status(400).json({ succes: true, msg: errros.array() })
         }
-})
+    })
 
 router.put('/update/comment/:cmtId',
     auth.varifyUser,
     auth.varifyAdminorUser, (req, res) => {
-        var id=req.params.cmtId
-        const comment=req.body.comment
-        Comment.updateOne({_id:id,comment:comment}).then(function () {
-            res.status(200).json({success:true, msg: "Update Successfull" })
+        var id = req.params.cmtId
+        const comment = req.body.comment
+        Comment.updateOne({ _id: id, comment: comment }).then(function () {
+            res.status(200).json({ success: true, msg: "Update Successfull" })
         }).catch(function (e) {
-            res.status(400).json({success:true, msg: "Error" })
+            res.status(400).json({ success: true, msg: "Error" })
         })
     })
-module.exports=router
+
+router.get("/get/comment/:noteId",
+    auth.varifyUser,
+    auth.varifyAdminorUser, (req, res) => {
+        var id = req.params.noteId
+        Comment.find({ noteId: id }).then(function (data) {
+            res.status(200).json({ success: true, msg: "Update Successfull", data: data })
+        }).catch(function (e) {
+            res.status(201).json({ success: true, msg: "Error" })
+        })
+    })
+
+module.exports = router
