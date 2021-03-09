@@ -13,7 +13,7 @@ var upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
     console.log(file )
-    if ( file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||file.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation" || file.mimetype == "application/zip" ||file.mimetype=="file/pptx") {
+    if ( file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||file.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation" || file.mimetype == "application/zip" ||file.mimetype=="file/pptx" || file.mimetype == "application/pdf" || file.mimetype == "file/pdf") {
       cb(null, true);
     } else {
       cb({success: false,

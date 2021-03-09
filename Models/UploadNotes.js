@@ -26,6 +26,9 @@ const UploadNote=mongoose.model('UploadNote',{
     ratting:{
         type:Number
     },
+    noofRating:{
+        type:Number
+    },
     userId:{
         type:String,
         require:true

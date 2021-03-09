@@ -28,7 +28,7 @@ router.post('/upload/note',
             var c_name = post_data.c_name;
             var topic = post_data.topic;
             var description = post_data.description;
-            var ratting = 1
+            var ratting = 0.00
             var userId = post_data.userId
             var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, userId: userId })
             data.save().then(function (data) {
@@ -59,7 +59,7 @@ router.put("/upload/user/file/:id", auth.varifyUser, (req, res) => {
             res.status(201).json({ success: false, msg: "not gonna happen" })
         }
         else {
-            console.log(req.file)
+            console.log(req.file +"hello")
             const id = req.params.id
             //console.log("hello")
             file = req.file.filename
@@ -101,7 +101,7 @@ router.get('/note/by/notid/:id',
     auth.varifyAdminorUser, (req, res) => {
         const id = req.params.id
         UploadNotes.find({ _id: id }).then(function (data) {
-           // console.log(data)
+            // console.log(data)
             res.status(200).json({ success: true, data: data })
         }).catch(function (e) {
             console.log("here")
@@ -133,5 +133,21 @@ router.get('/notes/showall',
             res.status(500).json({ success: false, msg: e })
         })
     })
-//////also do update here
+
+router.put('/rate/the/note/:id/:ratting/:noofRating',
+    auth.varifyUser, (req, res) => {
+        console.log("here")
+        const id = req.params.id
+        const ratting = req.params.ratting
+        console.log(id)
+        console.log(ratting)
+        const noofRating = req.params.noofRating
+        console.log(noofRating)
+        UploadNote.updateOne({ _id: id }, { ratting: ratting, noofRating: noofRating }).then(function () {
+            res.status(200).json({ success: true,msg:"Thnak You For Your Ratting" })
+        }).catch(function (e) {
+            res.status(201).json({ success: false,msg:"Somthing went wrong"  })
+        })
+    }
+)
 module.exports = router
