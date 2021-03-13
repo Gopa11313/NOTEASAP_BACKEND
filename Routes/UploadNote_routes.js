@@ -88,7 +88,7 @@ router.get('/get/Ownnotes/:userId',
     auth.varifyAdminorUser, (req, res) => {
         const userId = req.params.userId
         UploadNotes.find({ userId: userId }).then(function (data) {
-            //console.log(data)
+            console.log(data)
             res.status(200).json({ success: true, data: data })
         }).catch(function (e) {
             console.log("here")
