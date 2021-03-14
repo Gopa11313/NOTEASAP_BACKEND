@@ -87,10 +87,10 @@ router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
     })
 })
 
-router.put('/user/update/:UserID',
+router.put('/user/update',
         auth.varifyUser,
         auth.varifyAdminorUser, (req, res) => {
-            const id = req.params.UserID
+            const id = req.body._id
             const name = req.body.name;
             const email = req.body.email;
             const password = req.body.password

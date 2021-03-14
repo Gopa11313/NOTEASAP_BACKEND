@@ -7,7 +7,7 @@ var storage = multer.diskStorage({
       cb(null, Date.now() + 'NOTEASAP' + file.originalname);
     },
   });
-const maxSize = 1 * 1024 * 1024; // for 1MB
+const maxSize = 5 * 1024 * 1024; // for 1MB
 
 var upload = multer({
   storage: storage,
