@@ -26,7 +26,7 @@ router.post('/note/bookmark',
             })
         }
         else {
-            res.status(400).json({ succes: true, msg: errros.array() })
+            res.status(400).json({ succes: true, msg: "error here" })
         }
     })
 router.get('/bookmark/notes/:id',

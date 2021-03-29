@@ -2,12 +2,15 @@ const jwt=require('jsonwebtoken');
 const User=require("../Models/RegisterUSer")
 
 module.exports.varifyUser=function(req,res,next){
+    // const token=req.headers.authorization.split(" ")[1];
+    // console.log(token)
     try{
         const token=req.headers.authorization.split(" ")[1];
-        console.log(token)
+        // console.log(token)
         const decodedData=jwt.verify(token,'secretkey');
         User.findById({_id:decodedData.userId}).then(function(alldata){
             req.user=alldata;
+            console.log(req.user)
             next()
         }).catch(function(err){
             return res.status(201).json({success:false,msg:"Unauthorized access!!"})
