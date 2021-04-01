@@ -53,7 +53,7 @@ router.post('/user/login', (req, res) => {
             Register.find({ email: req.body.email }).then(function (data) {
                 const token = jwt.sign({ userId: userData._id }, 'secretkey');
                 //console.log(data)
-                res.status(200).json({ success: true, msg: "Login Successfull", token: token, data: data,  id: userData._id})
+                res.status(200).json({ success: true, msg: "Login Successfull", token: token, data: data, id: userData._id })
             }).catch(function (e) {
 
             })
@@ -70,15 +70,15 @@ router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             console.log("here")
-            res.status(201).json({success:false,msg:"error"})
-        } 
+            res.status(201).json({ success: false, msg: "error" })
+        }
         else if (err) {
-            res.status(201).json({success:false, msg:"not gonna happen"})
+            res.status(201).json({ success: false, msg: "not gonna happen" })
         }
         else {
             const id = req.params.id
-            image=req.file.filename
-            Register.updateOne({ _id: id }, {image:image }).then(function () {
+            image = req.file.filename
+            Register.updateOne({ _id: id }, { image: image }).then(function () {
                 res.status(200).json({ success: true, msg: "Done" })
             }).catch(function (e) {
                 res.status(201).json({ success: false, msg: "not register" })
@@ -87,27 +87,62 @@ router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
     })
 })
 
+
+//sir lae dekhauni
 router.put('/user/update',
-        auth.varifyUser,
-        auth.varifyAdminorUser, (req, res) => {
-            const id = req.body._id
-            const name = req.body.name;
-            const email = req.body.email;
-            const password = req.body.password
-            const image="noimg"
-            const hash = bcrypt.hashSync(password, saltRounds);
-            Register.updateOne({ _id: id }, { name: name, email: email, password: hash,image:image}).then(function () {
-                res.status(200).json({ success: true, msg: "Update Successfull" })
-            }).catch(function (e) {
-                res.status(201).json({ success: true, msg: "error here" })
-            })
+    auth.varifyUser,
+    (req, res) => {
+        upload(req, res, function (err) {
+            if (err instanceof multer.MulterError) {
+                console.log("here bitch")
+                res.status(201).json({ success: false, msg: "error" })
+            }
+            else if (err) {
+                res.status(201).json({ success: false, msg: "not gonna happen" })
+            }
+            else {
+                console.log(req.body)
+                const id = req.body._id
+                const name = req.body.name;
+                const email = req.body.email;
+                var password = req.body.password
+                var image = req.file.filename
+                console.log(image)
+                const hash = bcrypt.hashSync(password, saltRounds);
+                Register.updateOne({ _id: id }, { name: name, email: email, password: hash, image: image }).then(function (data){
+                    console.log(data)
+                    res.status(200).json({ success: true, msg: "Update Successfull",data:data })
+                    // console.log("here nigga")
+                }).catch(function (e) {
+                    res.status(201).json({ success: true, msg: "error here" })
+                })
+            }
         })
+    })
+
+
+
 
 router.get('/get/me/:id',
     auth.varifyUser,
     (req, res) => {
-        const id=req.params.id
-        Register.find({ _id:id }).then(function (data) {
+        const id = req.params.id
+        // console.log(id)
+        Register.find({ _id: id }).then(function (data) {
+            // console.log(data)
+            res.status(200).json({ success: true, data: data })
+        }).catch(function (e) {
+            res.status(200).json({ success: false, msg: e })
+        })
+    })
+
+router.get('/get/me/web/:id',
+    auth.varifyUser,
+    (req, res) => {
+        const id = req.params.id
+        // console.log(id)
+        Register.findOne({ _id: id }).then(function (data) {
+            // console.log(data)
             res.status(200).json({ success: true, data: data })
         }).catch(function (e) {
             res.status(200).json({ success: false, msg: e })

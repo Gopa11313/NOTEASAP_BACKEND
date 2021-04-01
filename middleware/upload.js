@@ -12,9 +12,9 @@ const maxSize = 5 * 1024 * 1024; // for 1MB
 var upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    
     if ( file.mimetype == "image/png" ||file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
       console.log(file )
+      // console.log("here")
       cb(null, true);
     } else {
       cb({success: false,

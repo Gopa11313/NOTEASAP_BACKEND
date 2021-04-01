@@ -122,7 +122,7 @@ router.get('/get/Ownnotes/web/:userId',
         console.log(userId)
         UploadNotes.find({ userId: userId }).then(function (data) {
             // console.log("here1")
-            console.log( data)
+            // console.log(data)
             res.status(200).json({ success: true, data: data })
         }).catch(function (e) {
             console.log("here")
@@ -232,7 +232,7 @@ router.post('/upload/note/with/file',
                     var userId = post_data.userId
                     var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, userId: userId })
                     data.save().then(function (data) {
-                        res.status(200).json({ success: true, msg: "User Register Success", id: data._id })
+                        res.status(200).json({ success: true, msg: "note uploded Successfully!!", id: data._id })
                     }).catch(function (e) {
                         console.log("here")
                         res.status(201).json({ success: false, msg: "Some Error Occurs" })
@@ -246,6 +246,45 @@ router.post('/upload/note/with/file',
         }
     }
 )
+
+
+
+router.put('/Update/note/web',
+auth.varifyUser,
+    (req, res) => {
+        // console.log("here")
+        uploadfile(req, res, function (err) {
+            if (err instanceof multer.MulterError) {
+                // A Multer error occurred when uploading.
+                res.status(201).json({ success: false, msg: "error" })
+            }
+            else if (err) {
+
+                res.status(201).json({ success: false, msg: "not gonna happen" })
+            }
+            else {
+                var post_data = req.body;
+                // console.log(post_data)
+                const id = post_data.id
+                var file = req.file.filename;
+                //console.log(file)
+                var level = post_data.level;
+                var subject = post_data.subject;
+                var c_name = post_data.c_name;
+                var topic = post_data.topic;
+                var description = post_data.description;
+                var userId = post_data.userId
+                console.log(level + subject)
+                UploadNotes.updateOne({ _id: id }, { file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, userId: userId }).then(function (data) {
+                    console.log(data)
+                    res.status(200).json({ success: true, data: data })
+                }).catch(function (e) {
+                    console.log("here")
+                    res.status(201).json({ success: false, msg: "Some Error Occurs" })
+                })
+            }
+        })
+    })
 
 
 module.exports = router

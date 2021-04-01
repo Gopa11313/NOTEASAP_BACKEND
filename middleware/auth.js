@@ -10,7 +10,7 @@ module.exports.varifyUser=function(req,res,next){
         const decodedData=jwt.verify(token,'secretkey');
         User.findById({_id:decodedData.userId}).then(function(alldata){
             req.user=alldata;
-            console.log(req.user)
+            // console.log(req.user)
             next()
         }).catch(function(err){
             return res.status(201).json({success:false,msg:"Unauthorized access!!"})
