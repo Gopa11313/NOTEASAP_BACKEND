@@ -29,8 +29,9 @@ router.post('/upload/note',
             var topic = post_data.topic;
             var description = post_data.description;
             var ratting = 0.00
+            var noofRating=0
             var userId = post_data.userId
-            var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, userId: userId })
+            var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting,noofRating:noofRating, userId: userId })
             data.save().then(function (data) {
                 res.status(200).json({ success: true, msg: "User Register Success", id: data._id })
             }).catch(function (e) {
