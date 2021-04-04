@@ -94,20 +94,21 @@ router.put('/user/update',
     (req, res) => {
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
-                console.log("here bitch")
+                console.log("here")
                 res.status(201).json({ success: false, msg: "error" })
             }
             else if (err) {
                 res.status(201).json({ success: false, msg: "not gonna happen" })
             }
             else {
-                console.log(req.body)
-                const id = req.body._id
+                //console.log(req.body)
+                const id = req.body.id
+                console.log(id)
                 const name = req.body.name;
                 const email = req.body.email;
                 var password = req.body.password
                 var image = req.file.filename
-                console.log(image)
+                //console.log(image)
                 const hash = bcrypt.hashSync(password, saltRounds);
                 Register.updateOne({ _id: id }, { name: name, email: email, password: hash, image: image }).then(function (data){
                     console.log(data)
@@ -119,8 +120,6 @@ router.put('/user/update',
             }
         })
     })
-
-
 
 
 router.get('/get/me/:id',
