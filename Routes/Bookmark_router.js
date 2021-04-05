@@ -7,8 +7,8 @@ const { json } = require('body-parser');
 
 router.post('/note/bookmark',
     [
-        check('userId', "userId must be filled").not().isEmpty(),
-        check('noteId', "NoteId must be filled").not().isEmpty()
+        // check('userId', "userId must be filled").not().isEmpty(),
+        // check('noteId', "NoteId must be filled").not().isEmpty()
     ],
     auth.varifyUser,
     auth.varifyParticularUser, (req, res) => {
@@ -17,6 +17,7 @@ router.post('/note/bookmark',
             var post_data = req.body
             var userId = post_data.userId/////check it and ask
             var noteId = post_data.noteId
+            console.log(post_data)
             var data = BookMark({ userId: userId, noteId: noteId })
             data.save().then(function () {
                 console.log("success")
