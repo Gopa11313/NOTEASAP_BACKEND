@@ -1,6 +1,7 @@
 // use the path of your model
 const UploadNotes = require('../Models/UploadNotes');
 const mongoose = require('mongoose');
+const UploadNote = require('../Models/UploadNotes');
 // use the new name of the database
 const url = 'mongodb://127.0.0.1:27017/NoteAsap';
 beforeAll(async () => {
@@ -17,28 +18,31 @@ describe('Register Schema test anything', () => {
     it('Add User testing anything', () => {
         const note = {
             'file': 'nofile',
-            'email': 'dummy1235@gmail.com',
-            'password': "dummy",
-            'image': 'noimg'
+            'level': 'test',
+            'subject': "test",
+            'c_name': 'test',
+            'topic':'test',
+            'description':'test',
+            "userId":"test"
         };
 
-        return Register.create(user)
+        return UploadNotes.create(note)
             .then((pro_ret) => {
-                expect(pro_ret.name).toEqual('dummy name');
+                expect(pro_ret.file).toEqual('nofile');
             });
     });
 
     it('to test the update', async () => {
-        return Register.findOneAndUpdate({ _id: Object('606d42e6f77b38125c33f5df') },
-            { $set: { name: 'ram' } })
+        return UploadNotes.findOneAndUpdate({ _id: Object('606d489cc2a9913ad0b9f49e') },
+            { $set: { file: 'nofile' } })
             .then((pp) => {
-                expect(pp.name).toEqual('ram')
+                expect(pp.file).toEqual('nofile')
             })
 
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await Register.deleteMany();
+        const status = await UploadNotes.deleteOne({_id:"606d489cc2a9913ad0b9f49e"});
         expect(status.ok).toBe(1);
     })
 
