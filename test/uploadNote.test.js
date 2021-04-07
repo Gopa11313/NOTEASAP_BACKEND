@@ -33,7 +33,7 @@ describe('Register Schema test anything', () => {
     });
 
     it('to test the update', async () => {
-        return UploadNotes.findOneAndUpdate({ _id: Object('606d489cc2a9913ad0b9f49e') },
+        return UploadNotes.findOneAndUpdate({ _id: Object('606d4a64df60f7255812cd73') },
             { $set: { file: 'nofile' } })
             .then((pp) => {
                 expect(pp.file).toEqual('nofile')
@@ -42,7 +42,7 @@ describe('Register Schema test anything', () => {
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await UploadNotes.deleteOne({_id:"606d489cc2a9913ad0b9f49e"});
+        const status = await UploadNotes.deleteOne({_id:"606d4a64df60f7255812cd73"});
         expect(status.ok).toBe(1);
     })
 

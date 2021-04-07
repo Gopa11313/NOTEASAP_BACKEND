@@ -17,7 +17,7 @@ describe('Register Schema test anything', () => {
     it('Add User testing anything', () => {
         const user = {
             'name': 'dummy name',
-            'email': 'dummy1234@gmail.com',
+            'email': 'dummy34@gmail.com',
             'password': "dummy",
             'image': 'noimg'
         };
@@ -29,7 +29,7 @@ describe('Register Schema test anything', () => {
     });
 
     it('to test the update', async () => {
-        return Register.findOneAndUpdate({ _id: Object('606d48358c59ed26c81f1a5c') },
+        return Register.findOneAndUpdate({ _id: Object('606d4a649f6e2517a0f07fe0') },
             { $set: { name: 'dummy name' } })
             .then((pp) => {
                 expect(pp.name).toEqual('dummy name')
@@ -38,7 +38,7 @@ describe('Register Schema test anything', () => {
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await Register.deleteOne({_id: '606d48358c59ed26c81f1a5c'});
+        const status = await Register.deleteOne({_id: '606d4a649f6e2517a0f07fe0'});
         expect(status.ok).toBe(1);
     })
 

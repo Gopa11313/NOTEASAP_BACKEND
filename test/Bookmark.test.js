@@ -29,7 +29,7 @@ describe('Register Schema test anything', () => {
     });
 
     it('to test the update', async () => {
-        return BookMark.findOneAndUpdate({ _id: Object('606d489c6ff90949e49654d6') },
+        return BookMark.findOneAndUpdate({ _id: Object('606d4a64713f3c51f45395f4') },
             { $set: { userId: 'test' } })
             .then((pp) => {
                 expect(pp.userId).toEqual('test')
@@ -38,7 +38,7 @@ describe('Register Schema test anything', () => {
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await BookMark.deleteOne({_id:"606d489c6ff90949e49654d6"});
+        const status = await BookMark.deleteOne({_id:"606d4a64713f3c51f45395f4"});
         expect(status.ok).toBe(1);
     })
 
