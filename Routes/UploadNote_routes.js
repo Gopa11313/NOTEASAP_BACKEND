@@ -29,9 +29,9 @@ router.post('/upload/note',
             var topic = post_data.topic;
             var description = post_data.description;
             var ratting = 0.00
-            var noofRating=0
+            var noofRating = 0
             var userId = post_data.userId
-            var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting,noofRating:noofRating, userId: userId })
+            var data = new UploadNote({ file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, ratting: ratting, noofRating: noofRating, userId: userId })
             data.save().then(function (data) {
                 res.status(200).json({ success: true, msg: "User Register Success", id: data._id })
             }).catch(function (e) {
@@ -49,7 +49,7 @@ router.put("/upload/user/file/:id", auth.varifyUser, (req, res) => {
     console.log(req.file)
     const id = req.params.id
     uploadfile(req, res, function (err) {
-
+        console.log(id)
         if (err instanceof multer.MulterError) {
             // A Multer error occurred when uploading.
             res.status(201).json({ success: false, msg: "error" })
@@ -61,7 +61,7 @@ router.put("/upload/user/file/:id", auth.varifyUser, (req, res) => {
         else {
             console.log(req.file + "hello")
             const id = req.params.id
-            //console.log("hello")
+            console.log("hello")
             file = req.file.filename
             UploadNote.updateOne({ _id: id }, { file: file }).then(function () {
                 res.status(200).json({ success: true, msg: "Done" })
@@ -75,7 +75,7 @@ router.get('/get/notes',
     (req, res) => {
         const userId = req.params.userId
         UploadNotes.find().then(function (data) {
-            //console.log(data)
+            // console.log(data)
             res.status(200).json({ success: true, data: data })
         }).catch(function (e) {
             console.log("here")
@@ -86,7 +86,8 @@ router.put('/Update/note',
     auth.varifyUser,
     auth.varifyAdminorUser, (req, res) => {
         var post_data = req.body;
-        const id = req.post_data.id
+        console.log(post_data)
+        const id = post_data._id
         var file = "saas";
         var level = post_data.level;
         var subject = post_data.subject;
@@ -95,8 +96,8 @@ router.put('/Update/note',
         var description = post_data.description;
         var userId = post_data.userId
         UploadNotes.updateOne({ _id: id }, { file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, userId: userId }).then(function (data) {
-            //console.log(data)
-            res.status(200).json({ success: true, data: data })
+            console.log({ success: true, data: data })
+            res.status(201).json({ success: true, msg: "Update Successfull"})
         }).catch(function (e) {
             console.log("here")
             res.status(201).json({ success: false, msg: "Some Error Occurs" })
@@ -106,10 +107,10 @@ router.get('/get/Ownnotes/:userId',
     auth.varifyUser,
     auth.varifyAdminorUser, (req, res) => {
         const userId = req.params.userId
-        console.log(userId)
+        //console.log(userId)
         UploadNotes.find({ userId: userId }).then(function (data) {
-            console.log("here1")
-            console.log("here" + data)
+            // console.log("here1")
+            // console.log("here" + data)
             res.status(200).json({ success: true, data: data })
         }).catch(function (e) {
             console.log("here")
@@ -160,7 +161,7 @@ router.delete("/delete/note/:Nid",
     auth.varifyAdminorUser,
     (req, res) => {
         const Nid = req.params.Nid;
-        console.log(Nid)
+        console.log("here"+Nid)
         UploadNote.deleteOne({ _id: Nid }).then(function () {
             res.status(200).json({ success: true, msg: "Note Successfully deleted" })
         }).catch(function (e) {
@@ -251,9 +252,9 @@ router.post('/upload/note/with/file',
 
 
 router.put('/Update/note/web',
-auth.varifyUser,
+    auth.varifyUser,
     (req, res) => {
-        // console.log("here")
+        console.log("here")
         uploadfile(req, res, function (err) {
             if (err instanceof multer.MulterError) {
                 // A Multer error occurred when uploading.
@@ -285,6 +286,33 @@ auth.varifyUser,
                 })
             }
         })
+    })
+
+router.put('/Update/note/and',
+    auth.varifyUser,
+    (req, res) => {
+        // console.log("here")
+
+        var post_data = req.body;
+        // console.log(post_data)
+        const id = post_data._id
+        var file = "nofile";
+        //console.log(file)
+        var level = post_data.level;
+        var subject = post_data.subject;
+        var c_name = post_data.c_name;
+        var topic = post_data.topic;
+        var description = post_data.description;
+        var userId = post_data.userId
+        // console.log(level + subject)
+        UploadNotes.updateOne({ _id: id }, { file: file, level: level, subject: subject, c_name: c_name, topic: topic, description: description, userId: userId }).then(function (data) {
+            console.log(data)
+            res.status(200).json({ success: true, data: data })
+        }).catch(function (e) {
+            console.log("here")
+            res.status(201).json({ success: false, msg: "Some Error Occurs" })
+        })
+
     })
 
 

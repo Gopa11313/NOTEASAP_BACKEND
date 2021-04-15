@@ -78,6 +78,8 @@ router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
         else {
             const id = req.params.id
             image = req.file.filename
+            console.log("here")
+            console.log(image)
             Register.updateOne({ _id: id }, { image: image }).then(function () {
                 res.status(200).json({ success: true, msg: "Done" })
             }).catch(function (e) {
@@ -101,18 +103,19 @@ router.put('/user/update',
                 res.status(201).json({ success: false, msg: "not gonna happen" })
             }
             else {
-                //console.log(req.body)
+                console.log(req.body)
                 const id = req.body.id
                 console.log(id)
                 const name = req.body.name;
                 const email = req.body.email;
                 var password = req.body.password
                 var image = req.file.filename
-                //console.log(image)
+                
+                console.log(image)
                 const hash = bcrypt.hashSync(password, saltRounds);
-                Register.updateOne({ _id: id }, { name: name, email: email, password: hash, image: image }).then(function (data){
+                Register.updateOne({ _id: id }, { name: name, email: email, password: hash, image: image }).then(function (data) {
                     console.log(data)
-                    res.status(200).json({ success: true, msg: "Update Successfull",data:data })
+                    res.status(200).json({ success: true, msg: "Update Successfull", data: data })
                     // console.log("here nigga")
                 }).catch(function (e) {
                     res.status(201).json({ success: true, msg: "error here" })
@@ -122,11 +125,37 @@ router.put('/user/update',
     })
 
 
+
+
+router.put('/user/update/and',
+    auth.varifyUser,
+    (req, res) => {
+        console.log(req.body)
+        const id = req.body._id
+        console.log(id)
+        const name = req.body.name;
+        const email = req.body.email;
+        var password = req.body.password
+        var image = "noimg"
+        console.log(image+ name+email+password)
+        const hash = bcrypt.hashSync(password, saltRounds);
+        Register.updateOne({ _id: id }, { name: name, email: email, password: hash, image: image }).then(function (data) {
+            console.log(data)
+            res.status(200).json({ success: true, msg: "Update Successfull"})
+            // console.log("here nigga")
+        }).catch(function (e) {
+            res.status(201).json({ success: true, msg: "error here" })
+        })
+
+    })
+
+
+
 router.get('/get/me/:id',
     auth.varifyUser,
     (req, res) => {
         const id = req.params.id
-        // console.log(id)
+        console.log(id)
         Register.find({ _id: id }).then(function (data) {
             // console.log(data)
             res.status(200).json({ success: true, data: data })
